@@ -27,7 +27,17 @@ def getNoteContent(contentUrl: str) -> dict:
 def getNotesFromOneNote() -> dict:
     response = requests.get("https://graph.microsoft.com/v1.0/me/onenote/pages", headers={"Authorization": f"Bearer {ONENOTE_TOKEN}"})
     if response.status_code == 200:
-        return response.json()
+        # Return only title and contentUrl and parentSection.displayName
+        notes = []
+        for note in response.json()["value"]:
+            notes.append({
+                "title": note["title"],
+                "contentUrl": note["contentUrl"],
+                "parentSection": note["parentSection"]["displayName"]
+            })
+        return {
+            "notes": notes
+        }
     else:
         return {
             "error": "Failed to get notes from OneNote"
