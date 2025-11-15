@@ -16,6 +16,11 @@ An `.env` file needs to be created inside the `.src` folder. The following envir
 |---------------|---------------------------------------------------------|
 | ONENOTE_TOKEN | Graph Explorer token with permissions to read OneNote notes |
 
+# TOON usage
+This project uses TOON as the response format of the getNotes tool just as a way of testing TOON. For TOON encoding this project is using: [Toon-Python](https://github.com/toon-format/toon-python).
+
+Using TOON I see a 30% reduction on the number of output tokens of MCP tool.
+
 ### Usage
 
 For adding this MCP Server to Cursor, edit your `~/.cursor/mcp.json` and add the following:

@@ -2,7 +2,7 @@ from fastmcp import FastMCP
 import requests
 import os
 from dotenv import load_dotenv
-
+from toon_format import encode
 load_dotenv()
 
 ONENOTE_TOKEN = os.getenv("ONENOTE_TOKEN")
@@ -14,7 +14,7 @@ mcp = FastMCP("OneNote MCP Server")
     name="getNotes",
     description="This tool provides access to the user's OneNote notes."
 )
-def getNotes() -> dict:
+def getNotes() -> str:
     return getNotesFromOneNote()
 
 @mcp.tool(
@@ -24,7 +24,7 @@ def getNotes() -> dict:
 def getNoteContent(contentUrl: str) -> dict:
     return getNoteContentFromOneNote(contentUrl)
 
-def getNotesFromOneNote() -> dict:
+def getNotesFromOneNote() -> str:
     response = requests.get("https://graph.microsoft.com/v1.0/me/onenote/pages", headers={"Authorization": f"Bearer {ONENOTE_TOKEN}"})
     if response.status_code == 200:
         # Return only title and contentUrl and parentSection.displayName
@@ -35,13 +35,11 @@ def getNotesFromOneNote() -> dict:
                 "contentUrl": note["contentUrl"],
                 "parentSection": note["parentSection"]["displayName"]
             })
-        return {
-            "notes": notes
-        }
+        return encode(notes)
     else:
-        return {
+        return encode({
             "error": "Failed to get notes from OneNote"
-        }
+        })
 
 def getNoteContentFromOneNote(contentUrl: str) -> dict:
     response = requests.get(contentUrl, headers={"Authorization": f"Bearer {ONENOTE_TOKEN}"})

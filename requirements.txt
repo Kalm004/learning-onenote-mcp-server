@@ -1,0 +1,2 @@
+FastMCP==2.13.0.2
+toon_format @ git+https://github.com/toon-format/toon-python.git
